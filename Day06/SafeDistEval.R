@@ -144,9 +144,9 @@ ExcludePoints <- function(input){
   strt <- arrange(input, x, y)
   
   s1 <- TraceSide(strt[1,], input, "x", 1)
-  s2 <- TraceSide(tail(s1,1), input[-13,], "y", 1)
-  s3 <- TraceSide(tail(s2,1), input[-16,], "x", -1)
-  s4 <- TraceSide(tail(s3,1), input[-34,], "y", -1)
+  s2 <- TraceSide(tail(s1,1), input, "y", 1)
+  s3 <- TraceSide(tail(s2,1), input, "x", -1)
+  s4 <- TraceSide(tail(s3,1), input, "y", -1)
   
   rbind(s1, s2, s3, s4) %>% distinct()
   
