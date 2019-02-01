@@ -1,5 +1,6 @@
 library(purrr)
 library(microbenchmark)
+library(ggplot2)
 
 testData <- data.frame(players = as.integer(c(10, 13, 17, 21, 30)), 
                        maxMarble = as.integer(c(1618, 7999, 1104, 6111, 5807)))
@@ -242,6 +243,8 @@ MaxScore2 <- function(players, maxMarbles, playList = NULL, ...){
 }
 
 pL <- ScoreMoves(8e6, show_progress = TRUE) # took ~4 days to run
+readr::write_csv(pL, "Scoring Moves.csv")
+
 mS100 <- MaxScore2(data[1], data[2]*100, pL)
 
 test2Ans <- map2(testData$players, testData$maxMarble, MaxScore2, pL)
@@ -267,3 +270,12 @@ microbenchmark(
   # MaxScore2(13, 7999),
   MaxScore2(13, 7999, pL),
   times = 50)
+
+#### EDA ----
+
+maxStones <- seq(23, 1e6, by = 230) 
+max458maxes <- map(maxStones, MaxScore2, players = 458, playList = pL) %>%
+  unlist()
+
+ggplot(data.frame(x = maxStones[1:5e2], y = max458maxes[1:5e2]), aes(x = x, y = y)) +
+  geom_point()
